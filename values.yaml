@@ -1,0 +1,14 @@
+productpage:
+  replicas: 1
+
+  service:
+    port: 9080
+
+details:
+  replicas: 1
+
+ratings:
+  replicas: 1
+
+reviews:
+  replicas: 1

@@ -1,13 +1,24 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: productpage-v1
+  metadata:
+  name: {{ template "bookinfo.fullname" . }}
+  labels:
+    app: {{ template "bookinfo.name" . }}
+    chart: {{ template "bookinfo.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "bookinfo.name" . }}
+      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: productpage
+        app: {{ template "bookinfo.name" . }}
+        release: {{ .Release.Name }}
         version: v1
     spec:
       containers:
@@ -15,4 +26,5 @@ spec:
         image: istio/examples-bookinfo-productpage-v1:1.8.0
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 9080
+        - name: http
+          containerPort: {{ .Values.productpage.service.port }}
