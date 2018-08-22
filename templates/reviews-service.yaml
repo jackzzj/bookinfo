@@ -4,9 +4,16 @@ metadata:
   name: reviews
   labels:
     app: reviews
+    chart: {{ template "bookinfo.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
+  type: {{ .Values.reviews.service.type }}
   ports:
-  - port: 9080
-    name: http
+    - port: {{ .Values.reviews.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
     app: reviews
+    release: {{ .Release.Name }}

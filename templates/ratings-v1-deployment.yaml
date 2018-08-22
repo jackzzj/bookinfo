@@ -1,13 +1,24 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  metadata:
   name: ratings-v1
+  labels:
+    chart: {{ template "bookinfo.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.ratings.replicas }}
+  selector:
+    matchLabels:
+      app: ratings
+      release: {{ .Release.Name }}
+      version: v1
   template:
     metadata:
       labels:
         app: ratings
+        release: {{ .Release.Name }}
         version: v1
     spec:
       containers:
@@ -15,4 +26,18 @@ spec:
         image: istio/examples-bookinfo-ratings-v1:1.8.0
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 9080
+        - name: http
+          containerPort: 9080
+          protocol: TCP
+        livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5

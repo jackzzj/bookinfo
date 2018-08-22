@@ -1,0 +1,5 @@
+1. Get the application URL by running these commands:
+export INGRESS_HOST=$(minikube ip)
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
+Productpage will be available at http://${GATEWAY_URL}/productpage

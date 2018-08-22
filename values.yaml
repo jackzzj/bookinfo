@@ -1,14 +1,24 @@
+# Default values for bookinfo.
 productpage:
   replicas: 1
-
   service:
+    type: ClusterIP
     port: 9080
 
 details:
   replicas: 1
+  service:
+    type: ClusterIP
+    port: 9080
 
 ratings:
   replicas: 1
+  service:
+    type: ClusterIP
+    port: 9080
 
 reviews:
   replicas: 1
+  service:
+    type: ClusterIP
+    port: 9080

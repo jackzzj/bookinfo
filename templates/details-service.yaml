@@ -4,9 +4,16 @@ metadata:
   name: details
   labels:
     app: details
+    chart: {{ template "bookinfo.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
+  type: {{ .Values.details.service.type }}
   ports:
-  - port: 9080
-    name: http
+    - port: {{ .Values.details.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
     app: details
+    release: {{ .Release.Name }}

@@ -2,22 +2,22 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   metadata:
-  name: {{ template "bookinfo.fullname" . }}
+  name: productpage-v1
   labels:
-    app: {{ template "bookinfo.name" . }}
     chart: {{ template "bookinfo.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.productpage.replicas }}
   selector:
     matchLabels:
-      app: {{ template "bookinfo.name" . }}
+      app: productpage
       release: {{ .Release.Name }}
+      version: v1
   template:
     metadata:
       labels:
-        app: {{ template "bookinfo.name" . }}
+        app: productpage
         release: {{ .Release.Name }}
         version: v1
     spec:
@@ -27,4 +27,17 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
-          containerPort: {{ .Values.productpage.service.port }}
+          containerPort: 9080
+          protocol: TCP
+        livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
