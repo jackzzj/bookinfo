@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: reviews
-        image: istio/examples-bookinfo-reviews-v1:1.8.0
+        image: quay.io/jackzzj/examples-bookinfo-reviews-v1:1.8.0
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
@@ -41,3 +41,5 @@ spec:
             port: 9080
           initialDelaySeconds: 5
           periodSeconds: 5
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets }}
